@@ -65,7 +65,7 @@ def addMeeting():
         meetingType = 'Others'
     else: 
         print('Sorry, an invalid meeting type was entered. Restarting add meeting...')
-        printSpace()
+        addMeeting()
     printSpace()
     
     meetingID = input('Cool. Next enter the meeting ID, this can be either all numerals, all letters or both: ')
