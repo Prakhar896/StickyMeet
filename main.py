@@ -14,6 +14,12 @@ print('Welcome to StickyMeet! What would you like to do today?')
 
 meetings = []
 meetings = json.load(open("meetings.txt"))
+try:
+    if meetings['sample'] != None:
+        meetings.pop('sample')
+except:
+    print('No sample in database')
+print(meetings)
 
 ## Data Format:
 ## json
@@ -85,9 +91,32 @@ def addMeeting():
     
     ## Creating JSON object with data given...
     meetings[name] = { "type": meetingType, "id": meetingID, "pwd": meetingPwd, "link": meetingLink }
-    print(meetings)
+    json.dump(meetings, open("meetings.txt", 'w'))
     
-    
+def viewMeetings():
+    printSpace()
+    count = 0
+    for meeting in meetings:
+        try:
+            print('Meeting Number: {}'.format(count))
+            printSpace()
+            print('\tName: {}'.format(meeting))
+            printSpace()
+            print('\tPlatform: {}'.format(meetings[meeting]['type']))
+            printSpace()
+            print('\tID: {}'.format(meetings[meeting]['id']))
+            printSpace()
+            if meetings[meeting]['pwd'] != '':
+                print('\tPassword: {}'.format(meetings[meeting]['pwd']))
+                printSpace()
+            if meetings[meeting]['link'] != '':
+                print('\tLink: {}'.format(meetings[meeting]['link']))
+                printSpace()
+                
+            count += 1
+        except:
+            print("Error in loading data from database.")
+            
     
 
 
@@ -99,6 +128,8 @@ def mainRun():
         mainRun()
     if startingAction == 'add':
         addMeeting()
+    elif startingAction == 'view':
+        viewMeetings()
 
 mainRun()
  

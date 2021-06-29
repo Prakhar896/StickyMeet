@@ -1,1 +1,1 @@
-{ "hello": "world" }
+{"AMath Wed": {"type": "Zoom Cloud Meetings", "id": "394034148148", "pwd": "942304", "link": ""}, "Uptas Mon": {"type": "Zoom Cloud Meetings", "id": "391202383", "pwd": "4563465", "link": "https://mom.com"}}
