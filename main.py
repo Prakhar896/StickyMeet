@@ -38,6 +38,14 @@ def validationCheck(givenString):
         return False
     return True
 
+def copy2clip(txt):
+    if sys.platform == 'win32':
+        cmd='echo '+txt.strip()+'|clip'
+        return subprocess.check_call(cmd, shell=True)
+    else:
+        cmd='echo '+txt.strip()+'|pbcopy'
+        return subprocess.check_call(cmd, shell=True)
+
 printSpace()
 
 def addMeeting():
@@ -92,6 +100,8 @@ def addMeeting():
     ## Creating JSON object with data given...
     meetings[name] = { "type": meetingType, "id": meetingID, "pwd": meetingPwd, "link": meetingLink }
     json.dump(meetings, open("meetings.txt", 'w'))
+    printSpace()
+    print('Meeting added successfully!')
     
 def viewMeetings():
     printSpace()
@@ -112,24 +122,79 @@ def viewMeetings():
             if meetings[meeting]['link'] != '':
                 print('\tLink: {}'.format(meetings[meeting]['link']))
                 printSpace()
-                
             count += 1
         except:
             print("Error in loading data from database.")
-            
     
+def viewMeetingsGUI():
+    #Tkinter window setup
+    root = tk.Tk()
+    
+    canvas = tk.Canvas(root, height=700, width=700, bg="#263D42")
+    canvas.pack()
 
+    frame = tk.Frame(root, bg="white")
+    frame.place(relwidth=0.8, relheight=0.8, relx=0.1, rely=0.1)
+    
+    count = 0
+    def packData():
+        #Obtain target data
+        targetMeeting = ''
+        identifierCount = 0
+        for meeting in meetings:
+            if identifierCount == count:
+                targetMeeting = meeting
+            identifierCount += 1
+        
+        #Make labels with data
+        meetingNumberLabel = tk.Label(frame, text='Meeting Number: {}'.format(count), bg="white")
+        meetingNameLabel = tk.Label(frame, text="Name: {}".format(targetMeeting), bg="white")
+        meetingIDLabel = tk.Label(frame, text="ID: {}".format(meetings[targetMeeting]['id']), bg="white")
+        meetingPwdLabel = tk.Label(frame, text="Password: {}".format(meetings[targetMeeting]['pwd']), bg="white")
+        meetingLinkLabel = tk.Label(frame, text="Link: {}".format(meetings[targetMeeting]['link']), bg="white")
+        
+        #Pack labels
+        meetingNumberLabel.pack()
+        meetingNameLabel.pack()
+        meetingIDLabel.pack()
+        meetingPwdLabel.pack()
+        meetingLinkLabel.pack()
+        
+    packData()
+    
+    def moveToNextMeeting():
+        count += 1
+        for widget in frame.winfo_children():
+            widget.destroy()
+        packData()
+    
+    nextMeeting = tk.Button(root, text="Next Meeting", padx=10, pady=5, bg="#263D42", command=moveToNextMeeting)
+    nextMeeting.pack()
+    
+    root.mainloop()
+    
 
 def mainRun():
     startingAction = input('Type \'view\' to view your saved meetings, \'add\' for adding a new meeting, \'remove\' for removing a meeting \'help\' for help: ')
-    if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove':
+    if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove' and startingAction != 'view -visual' and startingAction != 'exit':
         print('Sorry, invalid action typed! Please try again!')
         printSpace()
         mainRun()
     if startingAction == 'add':
         addMeeting()
+        printSpace()
+        mainRun()
     elif startingAction == 'view':
         viewMeetings()
+        printSpace()
+        mainRun()
+    elif startingAction == 'view -visual':
+        viewMeetingsGUI()
+        printSpace()
+        mainRun()
+    elif startingAction == 'exit':
+        print('Byeeeee!')
+        exit()
 
 mainRun()
  
@@ -137,3 +202,4 @@ mainRun()
  ## Ideas:
  ## Meeting link generator with ID fitting into prefix url
  ## GUI format of viewing meetings that has copy to clipboard
+ ## Next function in tkinter window

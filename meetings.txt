@@ -1,1 +1,1 @@
-{"AMath Wed": {"type": "Zoom Cloud Meetings", "id": "394034148148", "pwd": "942304", "link": ""}, "Uptas Mon": {"type": "Zoom Cloud Meetings", "id": "391202383", "pwd": "4563465", "link": "https://mom.com"}}
+{"AMath Wed": {"type": "Zoom Cloud Meetings", "id": "394034148148", "pwd": "942304", "link": ""}, "Uptas Mon": {"type": "Zoom Cloud Meetings", "id": "391202383", "pwd": "4563465", "link": "https://mom.com"}, "EMath Sat": {"type": "Microsoft Teams", "id": "3444m2", "pwd": "", "link": ""}, "w": {"type": "Others", "id": "w", "pwd": "2", "link": "hhaa"}}
