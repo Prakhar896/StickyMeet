@@ -137,40 +137,81 @@ def viewMeetingsGUI():
     
     global guiViewMeetingsCount
     guiViewMeetingsCount = 0
-    def packData():
-        #Obtain target data
+    
+    def getMeetingName():
         targetMeeting = ''
         identifierCount = 0
         for meeting in meetings:
             if identifierCount == guiViewMeetingsCount:
                 targetMeeting = meeting
             identifierCount += 1
+        return targetMeeting
+    
+    def packData():
+        #Obtain target data
+        targetMeeting = getMeetingName()
         
         #Make labels with data
         meetingNumberLabel = tk.Label(frame, text='Meeting Number: {}'.format(guiViewMeetingsCount), bg="white")
         meetingNameLabel = tk.Label(frame, text="Name: {}".format(targetMeeting), bg="white")
         meetingIDLabel = tk.Label(frame, text="ID: {}".format(meetings[targetMeeting]['id']), bg="white")
-        meetingPwdLabel = tk.Label(frame, text="Password: {}".format(meetings[targetMeeting]['pwd']), bg="white")
-        meetingLinkLabel = tk.Label(frame, text="Link: {}".format(meetings[targetMeeting]['link']), bg="white")
+        if meetings[targetMeeting]['pwd'] != '':
+            meetingPwdLabel = tk.Label(frame, text="Password: {}".format(meetings[targetMeeting]['pwd']), bg="white")
+        if meetings[targetMeeting]['link'] != '':
+            meetingLinkLabel = tk.Label(frame, text="Link: {}".format(meetings[targetMeeting]['link']), bg="white")
         
         #Pack labels
         meetingNumberLabel.pack()
         meetingNameLabel.pack()
         meetingIDLabel.pack()
-        meetingPwdLabel.pack()
-        meetingLinkLabel.pack()
+        if meetings[targetMeeting]['pwd'] != '':
+            meetingPwdLabel.pack()
+        if meetings[targetMeeting]['link'] != '':
+            meetingLinkLabel.pack()
         
     packData()
     
     def moveToNextMeeting():
         global guiViewMeetingsCount
+        global nextMeeting
         guiViewMeetingsCount = guiViewMeetingsCount + 1
         if guiViewMeetingsCount >= len(meetings):
             guiViewMeetingsCount = 0
         for widget in frame.winfo_children():
             widget.destroy()
         packData()
+        
+        for widget in root.winfo_children():
+            if str(type(widget)) == "<class 'tkinter.Button'>":
+                widget.destroy()
+                
+        nextMeeting = tk.Button(root, text="Next Meeting", padx=10, pady=5, bg="#263D42", command=moveToNextMeeting)
+        nextMeeting.pack()
+        
+        def copyIDToClip():
+            meetingid = meetings[getMeetingName()]['id']
+            copy2clip(meetingid)
     
+        copyID = tk.Button(root, text="Copy ID", padx=10, pady=5, bg="#263D42", command=copyIDToClip)
+        copyID.pack()
+    
+        def copyPwdToClip():
+            meetingpwd = meetings[getMeetingName()]['pwd']
+            copy2clip(meetingpwd)
+    
+        if meetings[getMeetingName()]['pwd'] != '':
+            copyPwd = tk.Button(root, text="Copy Password", padx=10, pady=5, bg="#263D42", command=copyPwdToClip)
+            copyPwd.pack()
+    
+        def copyLinkToClip():
+            meetinglink = meetings[getMeetingName()]['link']
+            copy2clip(meetinglink)
+    
+        if meetings[getMeetingName()]['link'] != '':
+            copyLink = tk.Button(root, text="Copy Link", padx=10, pady=5, bg="#263D42", command=copyLinkToClip)
+            copyLink.pack()
+    
+    global nextMeeting
     nextMeeting = tk.Button(root, text="Next Meeting", padx=10, pady=5, bg="#263D42", command=moveToNextMeeting)
     nextMeeting.pack()
     
@@ -179,7 +220,7 @@ def viewMeetingsGUI():
 
 def mainRun():
     startingAction = input('Type \'view\' to view your saved meetings, \'add\' for adding a new meeting, \'remove\' for removing a meeting \'help\' for help: ')
-    if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove' and startingAction != 'view -visual' and startingAction != 'exit':
+    if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove' and startingAction != 'view -v' and startingAction != 'exit':
         print('Sorry, invalid action typed! Please try again!')
         printSpace()
         mainRun()
@@ -191,7 +232,7 @@ def mainRun():
         viewMeetings()
         printSpace()
         mainRun()
-    elif startingAction == 'view -visual':
+    elif startingAction == 'view -v':
         viewMeetingsGUI()
         printSpace()
         mainRun()
