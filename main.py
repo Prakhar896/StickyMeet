@@ -19,7 +19,6 @@ try:
         meetings.pop('sample')
 except:
     print('No sample in database')
-print(meetings)
 
 ## Data Format:
 ## json
@@ -136,18 +135,19 @@ def viewMeetingsGUI():
     frame = tk.Frame(root, bg="white")
     frame.place(relwidth=0.8, relheight=0.8, relx=0.1, rely=0.1)
     
-    count = 0
+    global guiViewMeetingsCount
+    guiViewMeetingsCount = 0
     def packData():
         #Obtain target data
         targetMeeting = ''
         identifierCount = 0
         for meeting in meetings:
-            if identifierCount == count:
+            if identifierCount == guiViewMeetingsCount:
                 targetMeeting = meeting
             identifierCount += 1
         
         #Make labels with data
-        meetingNumberLabel = tk.Label(frame, text='Meeting Number: {}'.format(count), bg="white")
+        meetingNumberLabel = tk.Label(frame, text='Meeting Number: {}'.format(guiViewMeetingsCount), bg="white")
         meetingNameLabel = tk.Label(frame, text="Name: {}".format(targetMeeting), bg="white")
         meetingIDLabel = tk.Label(frame, text="ID: {}".format(meetings[targetMeeting]['id']), bg="white")
         meetingPwdLabel = tk.Label(frame, text="Password: {}".format(meetings[targetMeeting]['pwd']), bg="white")
@@ -163,7 +163,10 @@ def viewMeetingsGUI():
     packData()
     
     def moveToNextMeeting():
-        count += 1
+        global guiViewMeetingsCount
+        guiViewMeetingsCount = guiViewMeetingsCount + 1
+        if guiViewMeetingsCount >= len(meetings):
+            guiViewMeetingsCount = 0
         for widget in frame.winfo_children():
             widget.destroy()
         packData()
