@@ -243,9 +243,37 @@ def viewMeetingsGUI():
     
     root.mainloop()
     
+def removeMeeting():
+    printSpace()
+    meetingIdentifier = input('Enter the name of the meeting (case-sensitive) or enter the meeting number: ')
+    if meetingIdentifier.isdigit():
+        try:
+            meetingNumber = int(meetingIdentifier)
+            count = 0
+            for meeting in meetings:
+                if count == meetingNumber:
+                    meetings.pop(meeting)
+                    json.dump(meetings, open("meetings.txt", 'w'))
+                    printSpace()
+                    print('Meeting deleted successfully!')
+                    break
+                count += 1
+        except:
+            print('Sorry, failed to remove meeting')
+    else:
+        try:
+            meetings.pop(meetingIdentifier)
+            json.dump(meetings, open("meetings.txt", 'w'))
+            printSpace()
+            print('Meeting deleted successfully!')
+        except:
+            print('Sorry, failed to remove meeting')
+    
 
 def mainRun():
-    startingAction = input('Type \'view\' to view your saved meetings, \'add\' for adding a new meeting, \'remove\' for removing a meeting \'help\' for help: ')
+    print('You can always type \'exit\' to exit the application!')
+    printSpace()
+    startingAction = input('Type \'view\' to view your saved meetings or \'view -v\' to view them in a GUI Window, \n\'add\' for adding a new meeting, \n\'remove\' for removing a meeting \n\'help\' for help: ')
     if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove' and startingAction != 'view -v' and startingAction != 'exit':
         print('Sorry, invalid action typed! Please try again!')
         printSpace()
@@ -260,6 +288,10 @@ def mainRun():
         mainRun()
     elif startingAction == 'view -v':
         viewMeetingsGUI()
+        printSpace()
+        mainRun()
+    elif startingAction == 'remove':
+        removeMeeting()
         printSpace()
         mainRun()
     elif startingAction == 'exit':
