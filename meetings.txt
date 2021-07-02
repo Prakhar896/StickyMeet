@@ -1,1 +1,1 @@
-{"AWS": {"type": "Zoom Cloud Meetings", "id": "589237239857", "pwd": "359823728957", "link": ""}, "RMSS Phy Sat": {"type": "Microsoft Teams", "id": "mama gae", "pwd": "", "link": ""}}
+{}

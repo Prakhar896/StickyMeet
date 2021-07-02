@@ -268,13 +268,52 @@ def removeMeeting():
             print('Meeting deleted successfully!')
         except:
             print('Sorry, failed to remove meeting')
-    
+            
+def userHelp():
+    printSpace()
+    print('Fret not, I have got you covered! I am the StickyMeet helper and I will explain all features of StickyMeet throughly!')
+    printSpace()
+    print("""
+          Hey there! StickyMeet is an application designed for you to easily save your meeting information so you do not have to go hunting for your next meeting's information again!
+          All data in StickyMeet is stored locally and remains even after you exit the application!
+          
+          First up, the 'add' function launches up an interactive method for you to easily save your meeting.
+          (1) The function will ask you for the label of the meeting (also called the meeting name) for you to easily recognize which meeting is what.
+          (2) Next it will ask the Meeting's ID, which you can find out via the steps below:
+                Zoom: Your meeting host should send you the meeting's ID in the message. If he/she only gives you a link, the ID can be found at the end of the link. For example:
+                      https://us02web.zoom.us/j/234414332 has the meeting ID 234 4143 32
+                Google Meet: You can find the meeting ID at the end of the link. For example:
+                             https://meet.google.com/yvh-wkpf-dpe has the ID yvh wkpf dpe
+            Microsoft Teams: Your meeting host should provide you the ID.
+          (3) Next it will ask the password, so enter it in, if there is one. If the meeting is not password-protected simply type 'skip'.
+          (4) Next it will ask for the link, which is optional as well. If you wish to save it, enter the link, if not type 'skip'.
+          
+          And done! You have just added a new meeting!
+          
+          Next up, the 'view' or 'view -v' function allows you to easily view all of your meetings in a neat manner.
+          There is two ways you can view your saved meetings: 1) Via text in the console, 2) Via a Graphical User Interface (GUI) which is a visual window.
+          (1) Typing 'view' will cycle through all of your meeting information and show it to you one-by-one. Do note that every meeting has a number.
+          (2) Typing 'view -v' will open up a visual window with which you can view your saved meetings easily. You can even copy certain information with the buttons located at the bottom of the window.
+              You can go to the next meeting simply by pressing the 'Next Meeting' button!
+              
+        Next up, the 'remove' function easily allows you to remove a meeting with either the meeting name or the meeting number as an input.
+        If you know the number of the meeting, for example 0, you can simply type '0' and the meeting with the 0th number will be removed!
+        Of course, you can find out the meeting number by using the 'view' function.
+        Or you can remove a meeting with its name. Simply type in the name of the meeting and StickyMeet will delete it. Do note that this is case-sensitive.
+
+        Next up, is the 'help' function. You already know this one! This simply prints a thorough explanation on the features of StickyMeet.
+        
+        Lastly, the 'exit' function simply closes the application.
+        
+        Hope you now have a clearter understanding of StickyMeet!!!
+          """)
+    printSpace
 
 def mainRun():
     print('You can always type \'exit\' to exit the application!')
     printSpace()
     startingAction = input('Type \'view\' to view your saved meetings or \'view -v\' to view them in a GUI Window, \n\'add\' for adding a new meeting, \n\'remove\' for removing a meeting \n\'help\' for help: ')
-    if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove' and startingAction != 'view -v' and startingAction != 'exit':
+    if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove' and startingAction != 'view -v' and startingAction != 'exit' and startingAction != 'help':
         print('Sorry, invalid action typed! Please try again!')
         printSpace()
         mainRun()
@@ -283,15 +322,27 @@ def mainRun():
         printSpace()
         mainRun()
     elif startingAction == 'view':
+        if len(meetings) == 0:
+            print('Sorry! No meetings are saved to display! Add a meeting by typing \'add\'!')
+            printSpace()
+            mainRun()
         viewMeetings()
         printSpace()
         mainRun()
     elif startingAction == 'view -v':
+        if len(meetings) == 0:
+            print('Sorry! No meetings are saved to display! Add a meeting by typing \'add\'!')
+            printSpace()
+            mainRun()
         viewMeetingsGUI()
         printSpace()
         mainRun()
     elif startingAction == 'remove':
         removeMeeting()
+        printSpace()
+        mainRun()
+    elif startingAction == 'help':
+        userHelp()
         printSpace()
         mainRun()
     elif startingAction == 'exit':
@@ -305,3 +356,8 @@ mainRun()
  ## Meeting link generator with ID fitting into prefix url
  ## GUI format of viewing meetings that has copy to clipboard
  ## Next function in tkinter window
+
+
+# Todos:
+# Make check for same meeting names
+# 
