@@ -215,6 +215,32 @@ def viewMeetingsGUI():
     nextMeeting = tk.Button(root, text="Next Meeting", padx=10, pady=5, bg="#263D42", command=moveToNextMeeting)
     nextMeeting.pack()
     
+    # i dont know wth is happenning rn what am i even doing
+    # it works but i dont knoow why
+    
+    def copyIDToClip():
+        meetingid = meetings[getMeetingName()]['id']
+        copy2clip(meetingid)
+    
+    copyID = tk.Button(root, text="Copy ID", padx=10, pady=5, bg="#263D42", command=copyIDToClip)
+    copyID.pack()
+    
+    def copyPwdToClip():
+        meetingpwd = meetings[getMeetingName()]['pwd']
+        copy2clip(meetingpwd)
+    
+    if meetings[getMeetingName()]['pwd'] != '':
+        copyPwd = tk.Button(root, text="Copy Password", padx=10, pady=5, bg="#263D42", command=copyPwdToClip)
+        copyPwd.pack()
+    
+    def copyLinkToClip():
+        meetinglink = meetings[getMeetingName()]['link']
+        copy2clip(meetinglink)
+    
+    if meetings[getMeetingName()]['link'] != '':
+        copyLink = tk.Button(root, text="Copy Link", padx=10, pady=5, bg="#263D42", command=copyLinkToClip)
+        copyLink.pack()
+    
     root.mainloop()
     
 
