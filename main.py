@@ -110,12 +110,23 @@ def addMeeting():
         meetingPwd = ''
     printSpace()
     
-    meetingLink = input('Next enter the meeting\'s link (enter \'skip\' if no viable link is available): ')
+    meetingLink = ''
+    if settings['linkGeneratorEnabled'] == 'true' and (meetingType == 'Zoom Cloud Meetings' or meetingType == 'Google Meet'):
+        meetingLink = input('Next enter the meeting\'s link (enter \'skip\' if no viable link is available, or type \'auto\' for StickyMeet to generate it for you): ')
+    else:
+        meetingLink = input('Next enter the meeting\'s link (enter \'skip\' if no viable link is available): ')
     if not validationCheck(meetingLink):
         print('Please enter data properly. Restarting add meeting...')
         addMeeting()
     if meetingLink == 'skip':
-         meetingLink = ''
+        meetingLink = ''
+    if meetingLink == 'auto':
+        if meetingType == 'Zoom Cloud Meetings':
+            meetingLink = 'https://us02web.zoom.us/j/' + meetingID.strip()
+        elif meetingType == 'Google Meet':
+            individualIDCodes = meetingID.split(' ') 
+            finalPath = '-'.join(individualIDCodes)
+            meetingLink = 'https://meet.google.com/' + finalPath
     
     ## Creating JSON object with data given...
     meetings[name] = { "type": meetingType, "id": meetingID, "pwd": meetingPwd, "link": meetingLink }
@@ -328,19 +339,59 @@ def userHelp():
         
         Hope you now have a clearter understanding of StickyMeet!!!
           """)
-    printSpace
+    
+def changeSetting():
+    printSpace()
+    print('Welcome to the User Settings manager!')
+    print('Here you can change different settings of the app as you like.')
+    printSpace()
+    print('Available Settings include: \n\t\'link-generation\': System which allows you to easily generate a link with the ID you have provided when adding a meeting for select meeting platforms.')
+    print('Type \'help\' on the main run for more information about settings.')
+    printSpace()
+    settingName = input('Please enter the setting you would like to change (case-sensitive) or type \'view\' to view current state of all settings: ')
+    if settingName == 'link-generation':
+        printSpace()
+        newStatus = input('Please type \'enable\' to enable or \'disable\' to disable this setting: ')
+        if newStatus == 'enable':
+            settings['linkGeneratorEnabled'] = 'true'
+            json.dump(settings, open('settings.txt', 'w'))
+            printSpace()
+            print('Setting updated successfully!')
+        elif newStatus == 'disable':
+            settings['linkGeneratorEnabled'] = 'false'
+            json.dump(settings, open('settings.txt', 'w'))
+            printSpace()
+            print('Setting updated successfully!')
+        else:
+            print('Sorry, invalid status entered. Failed to update setting. Restarting settings manager...')
+            changeSetting()
+    elif settingName == 'view':
+        printSpace()
+        for setting in settings:
+            if setting == 'linkGeneratorEnabled':
+                currentStatus = settings[setting]
+                if currentStatus == 'true':
+                    currentStatus = 'Enabled'
+                else:
+                    currentStatus = 'Disabled'
+                print('\tlink-generation: ' + currentStatus)
+    elif settingName == 'exit':
+        print('Exiting User Settings Manager...')
+        return
 
 def mainRun():
     print('You can always type \'exit\' to exit the application!')
     printSpace()
-    startingAction = input('Type \'view\' to view your saved meetings or \'view -v\' to view them in a GUI Window, \n\'add\' for adding a new meeting, \n\'remove\' for removing a meeting \n\'help\' for help: ')
-    if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove' and startingAction != 'view -v' and startingAction != 'exit' and startingAction != 'help':
+    startingAction = input('Type \'view\' to view your saved meetings or \'view -v\' to view them in a GUI Window, \n\'add\' for adding a new meeting, \n\'remove\' for removing a meeting,\n\'settings\' for changing or viewing User Settings,\n\'help\' for help: ')
+    if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove' and startingAction != 'view -v' and startingAction != 'exit' and startingAction != 'help' and startingAction != 'settings':
         print('Sorry, invalid action typed! Please try again!')
         printSpace()
+        print('-------')
         mainRun()
     if startingAction == 'add':
         addMeeting()
         printSpace()
+        print('-------')
         mainRun()
     elif startingAction == 'view':
         if len(meetings) == 0:
@@ -349,6 +400,7 @@ def mainRun():
             mainRun()
         viewMeetings()
         printSpace()
+        print('-------')
         mainRun()
     elif startingAction == 'view -v':
         if len(meetings) == 0:
@@ -357,14 +409,22 @@ def mainRun():
             mainRun()
         viewMeetingsGUI()
         printSpace()
+        print('-------')
         mainRun()
     elif startingAction == 'remove':
         removeMeeting()
         printSpace()
+        print('-------')
+        mainRun()
+    elif startingAction == 'settings':
+        changeSetting()
+        printSpace()
+        print('-------')
         mainRun()
     elif startingAction == 'help':
         userHelp()
         printSpace()
+        print('-------')
         mainRun()
     elif startingAction == 'exit':
         print('Byeeeee!')
