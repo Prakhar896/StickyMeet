@@ -13,7 +13,23 @@ import json
 print('Welcome to StickyMeet! What would you like to do today?')
 
 meetings = []
-meetings = json.load(open("meetings.txt"))
+if os.path.isfile('meetings.txt'):
+    meetings = json.load(open("meetings.txt"))
+else:
+    f = open("meetings.txt", "w")
+    json.dump({ "sample": "sample" }, f)
+    f.close()
+    meetings = []
+
+settings = []
+if os.path.isfile('settings.txt'):
+    settings = json.load(open("settings.txt"))
+else:
+    f = open("settings.txt", "w")
+    json.dump({ "linkGeneratorEnabled": "false" }, f)
+    f.close()
+    settings = { "linkGeneratorEnabled": "false" }
+
 try:
     if meetings['sample'] != None:
         meetings.pop('sample')
@@ -56,10 +72,15 @@ def addMeeting():
     if not validationCheck(name):
         print('Please enter data properly. Restarting add meeting...')
         addMeeting()
+    for meeting in meetings:
+        if name == meeting:
+            print('Sorry, this name has already been used. Please use a new name. Restarting add meeting...')
+            addMeeting()
+            return
     printSpace()
     
     meetingType = (input('Next up is the meeting platform. Enter \'z/zoom\' for Zoom Cloud Meetings, \'gm/meet\' for Google Meet, \'t/teams\' for Microsoft Teams or \'o\' for Others: ')).lower()
-    if not validationCheck(name):
+    if not validationCheck(meetingType):
         print('Please enter data properly. Restarting add meeting...')
         addMeeting()
     if meetingType == 'z' or meetingType == 'zoom':
@@ -76,13 +97,13 @@ def addMeeting():
     printSpace()
     
     meetingID = input('Cool. Next enter the meeting ID, this can be either all numerals, all letters or both: ')
-    if not validationCheck(name):
+    if not validationCheck(meetingID):
         print('Please enter data properly. Restarting add meeting...')
         addMeeting()
     printSpace()
     
     meetingPwd = input('Next up, enter the meeting\'s password (enter \'skip\' if meeting is not password-protected): ')
-    if not validationCheck(name):
+    if not validationCheck(meetingPwd):
         print('Please enter data properly. Restarting add meeting...')
         addMeeting()
     if meetingPwd == 'skip':
@@ -90,7 +111,7 @@ def addMeeting():
     printSpace()
     
     meetingLink = input('Next enter the meeting\'s link (enter \'skip\' if no viable link is available): ')
-    if not validationCheck(name):
+    if not validationCheck(meetingLink):
         print('Please enter data properly. Restarting add meeting...')
         addMeeting()
     if meetingLink == 'skip':
@@ -354,10 +375,10 @@ mainRun()
  
  ## Ideas:
  ## Meeting link generator with ID fitting into prefix url
- ## GUI format of viewing meetings that has copy to clipboard
- ## Next function in tkinter window
+ ## GUI format of viewing meetings that has copy to clipboard - done
+ ## Next function in tkinter window - done
 
 
 # Todos:
-# Make check for same meeting names
+# Make check for same meeting names - done
 # 
