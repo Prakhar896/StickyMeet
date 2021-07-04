@@ -17,7 +17,7 @@ Here are the steps to getting StickyMeet on your computer:
 
 ### Usage with Terminal/Command Prompt
 3) On macOS, open up an app named Terminal, or, if on Windows, open up Command Prompt.
-4) If the location for file downlaods in your browser is the default, cd (change directory) into the folder using `cd Downloads/StickyMeet-main`
+4) Considering the location for file downlaods in your browser is the default, cd (change directory) into the folder using `cd Downloads/StickyMeet-main`
 5) Type in `python3 main.py` to run the `main.py` file and you can start using StickyMeet from your OS's shell!
 
 ## Frequently-Answered Questions
