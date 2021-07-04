@@ -124,7 +124,7 @@ def addMeeting():
         if meetingType == 'Zoom Cloud Meetings':
             meetingLink = 'https://us02web.zoom.us/j/' + meetingID.strip()
         elif meetingType == 'Google Meet':
-            individualIDCodes = meetingID.split(' ') 
+            individualIDCodes = meetingID.split(' ')
             finalPath = '-'.join(individualIDCodes)
             meetingLink = 'https://meet.google.com/' + finalPath
     
@@ -378,12 +378,49 @@ def changeSetting():
     elif settingName == 'exit':
         print('Exiting User Settings Manager...')
         return
-
+    
+def performDataReset():
+    printSpace()
+    print('Initiating data reset...')
+    printSpace()
+    print('Deleting data files...')
+    try:
+        os.remove('meetings.txt')
+        os.remove('settings.txt')
+    except:
+        print('An error occurred in deleting data files. System reload required. Terminating app...')
+        exit()
+    printSpace()
+    print('Writing new data files...Please wait.')
+    time.sleep(2)
+    try:
+        meetings = []
+        if os.path.isfile('meetings.txt'):
+            meetings = json.load(open("meetings.txt"))
+        else:
+            f = open("meetings.txt", "w")
+            json.dump({ "sample": "sample" }, f)
+            f.close()
+            meetings = []
+            
+        settings = []
+        if os.path.isfile('settings.txt'):
+            settings = json.load(open("settings.txt"))
+        else:
+            f = open("settings.txt", "w")
+            json.dump({ "linkGeneratorEnabled": "false" }, f)
+            f.close()
+            settings = { "linkGeneratorEnabled": "false" }
+    except:
+        print('An error occurred in writing new data. System reload required. Terminating app...')
+        exit()
+    print('System data reset performed.')
+    
 def mainRun():
     print('You can always type \'exit\' to exit the application!')
     printSpace()
     startingAction = input('Type \'view\' to view your saved meetings or \'view -v\' to view them in a GUI Window, \n\'add\' for adding a new meeting, \n\'remove\' for removing a meeting,\n\'settings\' for changing or viewing User Settings,\n\'help\' for help: ')
-    if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove' and startingAction != 'view -v' and startingAction != 'exit' and startingAction != 'help' and startingAction != 'settings':
+    if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove' and startingAction != 'view -v' and startingAction != 'exit' and startingAction != 'help' and startingAction != 'settings' and startingAction != 'system-reset':
         print('Sorry, invalid action typed! Please try again!')
         printSpace()
         print('-------')
@@ -426,19 +463,13 @@ def mainRun():
         printSpace()
         print('-------')
         mainRun()
+    elif startingAction == 'system-reset':
+        performDataReset()
+        printSpace()
+        print('-------')
+        mainRun()
     elif startingAction == 'exit':
         print('Byeeeee!')
         exit()
 
 mainRun()
- 
- 
- ## Ideas:
- ## Meeting link generator with ID fitting into prefix url
- ## GUI format of viewing meetings that has copy to clipboard - done
- ## Next function in tkinter window - done
-
-
-# Todos:
-# Make check for same meeting names - done
-# 
