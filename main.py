@@ -129,7 +129,8 @@ def addMeeting():
             meetingLink = 'https://meet.google.com/' + finalPath
     
     ## Creating JSON object with data given...
-    meetings[name] = { "type": meetingType, "id": meetingID, "pwd": meetingPwd, "link": meetingLink }
+    setName = name
+    meetings[setName] = { "type": meetingType, "id": meetingID, "pwd": meetingPwd, "link": meetingLink }
     json.dump(meetings, open("meetings.txt", 'w'))
     printSpace()
     print('Meeting added successfully!')
