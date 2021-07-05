@@ -1,8 +1,3 @@
-# Ideas:
-# Mean Subject Grade
-# Discord Chat Bot
-# Hangman
-# Typing Test
 # Zoom Meeting ID and password saving system ***
 import os, sys, subprocess
 import tkinter as tk
@@ -338,32 +333,51 @@ def userHelp():
     print('Fret not, I have got you covered! I am the StickyMeet helper and I will explain all features of StickyMeet throughly!')
     printSpace()
     print("""
-          Hey there! StickyMeet is an application designed for you to easily save your meeting information so you do not have to go hunting for your next meeting's information again!
-          All data in StickyMeet is stored locally and remains even after you exit the application!
+        Hey there! StickyMeet is an application designed for you to easily save your meeting information so you do not have to go hunting for your next meeting's information again!
+        All data in StickyMeet is stored locally and remains even after you exit the application!
           
-          First up, the 'add' function launches up an interactive method for you to easily save your meeting.
-          (1) The function will ask you for the label of the meeting (also called the meeting name) for you to easily recognize which meeting is what.
-          (2) Next it will ask the Meeting's ID, which you can find out via the steps below:
-                Zoom: Your meeting host should send you the meeting's ID in the message. If he/she only gives you a link, the ID can be found at the end of the link. For example:
-                      https://us02web.zoom.us/j/234414332 has the meeting ID 234 4143 32
-                Google Meet: You can find the meeting ID at the end of the link. For example:
+        First up, the 'add' function launches up an interactive method for you to easily save your meeting.
+            (1) The function will ask you for the label of the meeting (also called the meeting name) for you to easily recognize which meeting is what.
+            (2) Next it will ask the Meeting's ID, which you can find out via the steps below:
+                    Zoom: Your meeting host should send you the meeting's ID in the message. If he/she only gives you a link, the ID can be found at the end of the link. For example:
+                        https://us02web.zoom.us/j/234414332 has the meeting ID 234 4143 32
+                    Google Meet: You can find the meeting ID at the end of the link. For example:
                              https://meet.google.com/yvh-wkpf-dpe has the ID yvh wkpf dpe
-            Microsoft Teams: Your meeting host should provide you the ID.
-          (3) Next it will ask the password, so enter it in, if there is one. If the meeting is not password-protected simply type 'skip'.
-          (4) Next it will ask for the link, which is optional as well. If you wish to save it, enter the link, if not type 'skip'.
+                    Microsoft Teams: Your meeting host should provide you the ID.
+            (3) Next it will ask the password, so enter it in, if there is one. If the meeting is not password-protected simply type 'skip'.
+            (4) Next it will ask for the link, which is optional as well. If you wish to save it, enter the link, if not type 'skip'.
           
-          And done! You have just added a new meeting!
+        And done! You have just added a new meeting!
           
-          Next up, the 'view' or 'view -v' function allows you to easily view all of your meetings in a neat manner.
-          There is two ways you can view your saved meetings: 1) Via text in the console, 2) Via a Graphical User Interface (GUI) which is a visual window.
-          (1) Typing 'view' will cycle through all of your meeting information and show it to you one-by-one. Do note that every meeting has a number.
-          (2) Typing 'view -v' will open up a visual window with which you can view your saved meetings easily. You can even copy certain information with the buttons located at the bottom of the window.
+        Next up, the 'view' or 'view -v' function allows you to easily view all of your meetings in a neat manner.
+        There is two ways you can view your saved meetings: 1) Via text in the console, 2) Via a Graphical User Interface (GUI) which is a visual window.
+            (1) Typing 'view' will cycle through all of your meeting information and show it to you one-by-one. Do note that every meeting has a number.
+            (2) Typing 'view -v' will open up a visual window with which you can view your saved meetings easily. You can even copy certain information with the buttons located at the bottom of the window.
               You can go to the next meeting simply by pressing the 'Next Meeting' button!
               
         Next up, the 'remove' function easily allows you to remove a meeting with either the meeting name or the meeting number as an input.
         If you know the number of the meeting, for example 0, you can simply type '0' and the meeting with the 0th number will be removed!
         Of course, you can find out the meeting number by using the 'view' function.
         Or you can remove a meeting with its name. Simply type in the name of the meeting and StickyMeet will delete it. Do note that this is case-sensitive.
+        
+        Next up, the 'edit' function easily allows you to edit specifc information of a meeting. Here are the steps to editing a meeting:
+            (1) First, StickyMeet will ask you to enter the name or number of the meeting you want to edit. Note that the name is case-sensitive and has to be the exact of what you put in.
+            (2) Second, enter the name of the element you want to edit. They include 'id', 'password', 'platform' and 'link'. All these valid names are also shown in the prompt.
+            (3) Third, it will ask you to enter the new value of the element. Hit enter and you are done!
+        
+        Next up, the 'settings' function opens up the User Settings manager.
+        As of now, only one setting (link-generation) is available for you to change according to your preference.
+        When you type 'settings' on the main screen, you can type 'view' on the following prompt to view the state of all current settings.
+        Settings and explanation list:
+            (1) link-generation: This setting, when turned on, allows you to have an option to let StickyMeet generate a meeting's link for you based on the ID you have provided when making a new meeting.
+                                When making a new meeting and asked for the link, if you said that the meeting platform is either Zoom Cloud Meetings or Google Meet, StickyMeet gives you an option to type 'auto' in the prompt
+                                to let StickyMeet generate the link for you automatically based on the platform and ID. For example, the ID 'jvh see asg' and the platform 'Google Meet' would generate the link 'https://meet.google.com/jvh-see-asg'.
+                            
+                                Changing this setting:
+                                    (1) Open up the User Settings manager by typing 'settings' on the main screen.
+                                    (2) Type in 'link-generation'
+                                    (3) If you wish to enable it, type in 'enable', if not, type in 'disable'
+                                    Done!
 
         Next up, is the 'help' function. You already know this one! This simply prints a thorough explanation on the features of StickyMeet.
         
@@ -581,7 +595,7 @@ def editMeeting():
                         finalPath = '-'.join(individualIDCodes)
                         newInfo = 'https://meet.google.com/' + finalPath
             else:
-                newInfo = input('')
+                newInfo = input('Please enter the new link: ')
             printSpace()
             try:
                 meetings[meetingIdentifier]['link'] = newInfo
@@ -645,11 +659,30 @@ def rereadData():
     print('Data re-read successfully.')
     restartApp()
     
+def errorHelp():
+    printSpace()
+    print("""
+          ***DANGER FUNCTIONS***:
+        Functions listed here are dangerous and should only be used if absolutely necessary.
+        
+        The 'system-reset' function deletes all of your current meetings data and restarts StickyMeet. 
+        If you are running StickyMeet on IDLE you will have to manually start up StickyMeet after its done resetting and stopping itself. 
+        Follow the intructions given after the reset to start up StickyMeet. If you are running StickyMeet on console, you do not have to worry,
+        StickyMeet will restart after the system reset and you can continue using StickyMeet.
+        This function should only be used if StickyMeet is resulting in constant errors.
+        
+        The 're-read' function re-reads the data files stored on your computer to update its database. After re-reading, StickyMeet will have to restart. 
+        If you are running StickyMeet on IDLE you will have to manually start up StickyMeet after its done resetting and stopping itself.
+        Follow the intructions given after the reset to start up StickyMeet.
+        If you are running StickyMeet on CONSOLE, you do not have to worry, StickyMeet will restart after the system reset 
+        and you can continue using StickyMeet. This function should only be used if StickyMeet is not able to show meetings properly or cannot add/remove/edit meetings.
+          """)
+    
 def mainRun():
-    print('You can always type \'exit\' to exit the application!')
+    print('You can always type \'Control + C\' or \'exit\' (only on the main screen,\n denoted by -------) to exit the application!')
     printSpace()
     startingAction = input('Type \'view\' to view your saved meetings or \'view -v\' to view them in a GUI Window, \n\'add\' for adding a new meeting, \n\'remove\' for removing a meeting,\n\'edit\' to edit a meeting,\n\'settings\' for changing or viewing User Settings,\n\'help\' for help: ')
-    validStartingActions = ['view', 'view -v', 'add', 'remove', 'exit', 'system-reset', 're-read', 'settings', 'help', 'version', 'edit']
+    validStartingActions = ['view', 'view -v', 'add', 'remove', 'exit', 'system-reset', 're-read', 'settings', 'help', 'version', 'edit', 'help error']
     if startingAction not in validStartingActions:
         print('Sorry, invalid action typed! Please try again!')
         printSpace()
@@ -690,6 +723,11 @@ def mainRun():
         mainRun()
     elif startingAction == 'help':
         userHelp()
+        printSpace()
+        print('-------')
+        mainRun()
+    elif startingAction == 'help error':
+        errorHelp()
         printSpace()
         print('-------')
         mainRun()
