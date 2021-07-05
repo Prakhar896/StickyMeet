@@ -60,6 +60,26 @@ def copy2clip(txt):
     else:
         cmd='echo '+txt.strip()+'|pbcopy'
         return subprocess.check_call(cmd, shell=True)
+    
+def restartApp():
+    if not ("idlelib" in sys.modules):
+        printSpace()
+        if sys.platform == 'win32':
+            cmd = 'python main.py'
+            subprocess.check_call(cmd, shell=True)
+            exit()
+        else:
+            cmd = 'python3 main.py'
+            subprocess.check_call(cmd, shell=True)
+            exit()
+    else:
+        printSpace()
+        print('Sorry, a critical system update required StickyMeet to restart but StickyMeet seems to be running on IDLE and hence cannot restart itself.')
+        printSpace()
+        print('You will have to manually start up StickyMeet. \nOn IDLE, click File > Open and select the `main.py` file. \nThen click Run > Run Module to start up StickyMeet.')
+        time.sleep(4)
+        print('Terminating app for manual restart...')
+        exit()
 
 printSpace()
 
@@ -416,6 +436,7 @@ def performDataReset():
         print('An error occurred in writing new data. System reload required. Terminating app...')
         exit()
     print('System data reset performed.')
+    restartApp()
     
 def rereadData():
     printSpace()
@@ -429,6 +450,7 @@ def rereadData():
         exit()
     time.sleep(2)
     print('Data re-read successfully.')
+    restartApp()
     
 def mainRun():
     print('You can always type \'exit\' to exit the application!')
