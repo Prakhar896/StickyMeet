@@ -88,10 +88,11 @@ def addMeeting():
     print('Alright, a new meeting it is!')
     printSpace()
     
-    name = input('What would you like to set this meeting\'s name as (the name acts like a label for you to recognise meetings): ')
+    name = input('What would you like to set this meeting\'s name as (the name acts like a label for you to recognise meetings, you CANNOT change this later): ')
     if not validationCheck(name):
         print('Please enter data properly. Restarting add meeting...')
         addMeeting()
+        return
     for meeting in meetings:
         if name == meeting:
             print('Sorry, this name has already been used. Please use a new name. Restarting add meeting...')
@@ -103,6 +104,7 @@ def addMeeting():
     if not validationCheck(meetingType):
         print('Please enter data properly. Restarting add meeting...')
         addMeeting()
+        return
     if meetingType == 'z' or meetingType == 'zoom':
         meetingType = 'Zoom Cloud Meetings'
     elif meetingType == 'gm' or meetingType == 'meet':
@@ -110,22 +112,30 @@ def addMeeting():
     elif meetingType == 't' or meetingType == 'teams':
         meetingType = 'Microsoft Teams'
     elif meetingType == 'o':
-        meetingType = 'Others'
+        specificPlatform = input('You selected \'Others\'. Please enter the name of the platform: ')
+        if not validationCheck(specificPlatform):
+            print('Please enter data properly. Restarting add meeting...')
+            addMeeting()
+            return
+        meetingType = specificPlatform
     else: 
         print('Sorry, an invalid meeting type was entered. Restarting add meeting...')
         addMeeting()
+        return
     printSpace()
     
     meetingID = input('Cool. Next enter the meeting ID, this can be either all numerals, all letters or both: ')
     if not validationCheck(meetingID):
         print('Please enter data properly. Restarting add meeting...')
         addMeeting()
+        return
     printSpace()
     
     meetingPwd = input('Next up, enter the meeting\'s password (enter \'skip\' if meeting is not password-protected): ')
     if not validationCheck(meetingPwd):
         print('Please enter data properly. Restarting add meeting...')
         addMeeting()
+        return
     if meetingPwd == 'skip':
         meetingPwd = ''
     printSpace()
@@ -138,6 +148,7 @@ def addMeeting():
     if not validationCheck(meetingLink):
         print('Please enter data properly. Restarting add meeting...')
         addMeeting()
+        return
     if meetingLink == 'skip':
         meetingLink = ''
     if meetingLink == 'auto':
@@ -400,6 +411,189 @@ def changeSetting():
         print('Exiting User Settings Manager...')
         return
     
+def editMeeting():
+    printSpace()
+    meetingIdentifier = input('Please enter the name (case-sensitive) or the number of the meeting you would like to edit: ')
+    printSpace()
+    if meetingIdentifier.isdigit():
+        try:
+            meetingNumber = int(meetingIdentifier)
+            count = 0
+            for meeting in meetings:
+                if count == meetingNumber:
+                    # Found meeting with meeting number
+                    elementToEdit = input("Please type in either 'id', 'password', 'platform' or 'link' to edit the specific information: ")
+                    printSpace()
+                    if elementToEdit == 'id':
+                        newInfo = input('Please enter the new ID: ')
+                        printSpace()
+                        try:
+                            meetings[meeting]['id'] = newInfo
+                            json.dump(meetings, open("meetings.txt", "w"))
+                            print('Meeting information updated successfully!')
+                            return
+                        except:
+                            print('Sorry, failed to edit the meeting.')
+                    elif elementToEdit == 'password':
+                        newInfo = input('Please enter the new password: ')
+                        printSpace()
+                        try:
+                            meetings[meeting]['pwd'] = newInfo
+                            json.dump(meetings, open("meetings.txt", "w"))
+                            print('Meeting information updated successfully!')
+                            return
+                        except:
+                            print('Sorry, failed to edit the meeting.')
+                    elif elementToEdit == 'platform':
+                        # get new platform
+                        newInfo = (input('Please enter the meeting platform. Enter \'z/zoom\' for Zoom Cloud Meetings, \'gm/meet\' for Google Meet, \'t/teams\' for Microsoft Teams or \'o\' for Others: ')).lower()
+                        if not validationCheck(newInfo):
+                            print('Please enter data properly. Restarting edit meeting...')
+                            editMeeting()
+                            return
+                        if newInfo == 'z' or newInfo == 'zoom':
+                            newInfo = 'Zoom Cloud Meetings'
+                        elif newInfo == 'gm' or newInfo == 'meet':
+                            newInfo = 'Google Meet'
+                        elif newInfo == 't' or newInfo == 'teams':
+                            newInfo = 'Microsoft Teams'
+                        elif newInfo == 'o':
+                            specificPlatform = input('You selected \'Others\'. Please enter the name of the platform: ')
+                            if not validationCheck(specificPlatform):
+                                print('Please enter data properly. Restarting edit meeting...')
+                                editMeeting()
+                                return
+                            newInfo = specificPlatform
+                        else: 
+                            print('Sorry, an invalid meeting type was entered. Restarting edit meeting...')
+                            editMeeting()
+                            return
+                        printSpace()
+            
+                        # update database
+                        try:
+                            meetings[meeting]['type'] = newInfo
+                            json.dump(meetings, open("meetings.txt", "w"))
+                            print('Meeting information updated successfully!')
+                            return
+                        except:
+                            print('Sorry, failed to edit the meeting.')
+                    elif elementToEdit == 'link':
+                        if settings['linkGeneratorEnabled'] == 'true' and (meetings[meeting]['type'] == 'Zoom Cloud Meetings' or meetings[meeting]['type'] == 'Google Meet'):
+                            newInfo = input('Please enter the new link (or type \'auto\' for StickyMeet to generate it for you): ')
+                            if newInfo == 'auto':
+                                if meetings[meeting]['type'] == 'Zoom Cloud Meetings':
+                                    newInfo = 'https://us02web.zoom.us/j/' + meetings[meeting]['id'].strip()
+                                elif meetings[meeting]['type'] == 'Google Meet':
+                                    individualIDCodes = meetings[meeting]['id'].split(' ')
+                                    finalPath = '-'.join(individualIDCodes)
+                                    newInfo = 'https://meet.google.com/' + finalPath
+                        else:
+                            newInfo = input('Please enter the new link: ')
+                            
+                        printSpace()
+                        try:
+                            meetings[meeting]['link'] = newInfo
+                            json.dump(meetings, open("meetings.txt", "w"))
+                            print('Meeting information updated successfully!')
+                            return
+                        except:
+                            print('Sorry, failed to edit the meeting.')
+                    else:
+                        print('Sorry, invalid element typed. Restarting edit meeting...')
+                        editMeeting()
+                        return
+                    break
+                count += 1
+            print('Sorry, meeting could not be found with given meeting number. Please try again')
+            return
+        except:
+            print('Sorry, failed to edit or find meeting.')
+    else:
+        try:
+            targetMeeting = meetings[meetingIdentifier]
+        except:
+            print('Sorry, could not identify meeting with name. Please try again.')
+            editMeeting()
+            return
+        elementToEdit = input("Please type in either 'id', 'password', 'platform' or 'link' to edit the specific information: ")
+        printSpace()
+        if elementToEdit == 'id':
+            newInfo = input('Please enter the new ID: ')
+            printSpace()
+            try:
+                meetings[meetingIdentifier]['id'] = newInfo
+                json.dump(meetings, open("meetings.txt", "w"))
+                print('Meeting information updated successfully!')
+            except:
+                print('Sorry, failed to edit the meeting.')
+        elif elementToEdit == 'password':
+            newInfo = input('Please enter the new password: ')
+            printSpace()
+            try:
+                meetings[meetingIdentifier]['pwd'] = newInfo
+                json.dump(meetings, open("meetings.txt", "w"))
+                print('Meeting information updated successfully!')
+            except:
+                print('Sorry, failed to edit the meeting.')
+        elif elementToEdit == 'platform':
+            # get new platform
+            newInfo = (input('Next up is the meeting platform. Enter \'z/zoom\' for Zoom Cloud Meetings, \'gm/meet\' for Google Meet, \'t/teams\' for Microsoft Teams or \'o\' for Others: ')).lower()
+            if not validationCheck(newInfo):
+                print('Please enter data properly. Restarting edit meeting...')
+                editMeeting()
+                return
+            if newInfo == 'z' or newInfo == 'zoom':
+                newInfo = 'Zoom Cloud Meetings'
+            elif newInfo == 'gm' or newInfo == 'meet':
+                newInfo = 'Google Meet'
+            elif newInfo == 't' or newInfo == 'teams':
+                newInfo = 'Microsoft Teams'
+            elif newInfo == 'o':
+                specificPlatform = input('You selected \'Others\'. Please enter the name of the platform: ')
+                if not validationCheck(specificPlatform):
+                    print('Please enter data properly. Restarting edit meeting...')
+                    editMeeting()
+                    return
+                newInfo = specificPlatform
+            else: 
+                print('Sorry, an invalid meeting type was entered. Restarting edit meeting...')
+                editMeeting()
+                return
+            printSpace()
+            
+            # update database
+            try:
+                meetings[meetingIdentifier]['type'] = newInfo
+                json.dump(meetings, open("meetings.txt", "w"))
+                print('Meeting information updated successfully!')
+            except:
+                print('Sorry, failed to edit the meeting.')
+        elif elementToEdit == 'link':
+            newInfo = ''
+            if settings['linkGeneratorEnabled'] == 'true' and (targetMeeting['type'] == 'Zoom Cloud Meetings' or targetMeeting['type'] == 'Google Meet'):
+                newInfo = input('Please enter the new link (or type \'auto\' for StickyMeet to generate it for you): ')
+                if newInfo == 'auto':
+                    if targetMeeting['type'] == 'Zoom Cloud Meetings':
+                        newInfo = 'https://us02web.zoom.us/j/' + targetMeeting['id'].strip()
+                    elif targetMeeting['type'] == 'Google Meet':
+                        individualIDCodes = targetMeeting['id'].split(' ')
+                        finalPath = '-'.join(individualIDCodes)
+                        newInfo = 'https://meet.google.com/' + finalPath
+            else:
+                newInfo = input('')
+            printSpace()
+            try:
+                meetings[meetingIdentifier]['link'] = newInfo
+                json.dump(meetings, open("meetings.txt", "w"))
+                print('Meeting information updated successfully!')
+            except:
+                print('Sorry, failed to edit the meeting.')
+        else:
+            print('Sorry, invalid element typed. Restarting edit meeting...')
+            editMeeting()
+            return
+    
 def performDataReset():
     printSpace()
     print('Initiating data reset...')
@@ -441,7 +635,6 @@ def performDataReset():
 def rereadData():
     printSpace()
     print('Re-reading data from data files... please wait!')
-    print(json.load(open("settings.txt")))
     try:
         meetings = json.load(open("meetings.txt"))
         settings = json.load(open("settings.txt"))
@@ -455,8 +648,9 @@ def rereadData():
 def mainRun():
     print('You can always type \'exit\' to exit the application!')
     printSpace()
-    startingAction = input('Type \'view\' to view your saved meetings or \'view -v\' to view them in a GUI Window, \n\'add\' for adding a new meeting, \n\'remove\' for removing a meeting,\n\'settings\' for changing or viewing User Settings,\n\'help\' for help: ')
-    if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove' and startingAction != 'view -v' and startingAction != 'exit' and startingAction != 'help' and startingAction != 'settings' and startingAction != 'system-reset' and startingAction != 're-read' and startingAction != 'version':
+    startingAction = input('Type \'view\' to view your saved meetings or \'view -v\' to view them in a GUI Window, \n\'add\' for adding a new meeting, \n\'remove\' for removing a meeting,\n\'edit\' to edit a meeting,\n\'settings\' for changing or viewing User Settings,\n\'help\' for help: ')
+    validStartingActions = ['view', 'view -v', 'add', 'remove', 'exit', 'system-reset', 're-read', 'settings', 'help', 'version', 'edit']
+    if startingAction not in validStartingActions:
         print('Sorry, invalid action typed! Please try again!')
         printSpace()
         print('-------')
@@ -496,6 +690,11 @@ def mainRun():
         mainRun()
     elif startingAction == 'help':
         userHelp()
+        printSpace()
+        print('-------')
+        mainRun()
+    elif startingAction == 'edit':
+        editMeeting()
         printSpace()
         print('-------')
         mainRun()
