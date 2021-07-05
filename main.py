@@ -417,11 +417,24 @@ def performDataReset():
         exit()
     print('System data reset performed.')
     
+def rereadData():
+    printSpace()
+    print('Re-reading data from data files... please wait!')
+    print(json.load(open("settings.txt")))
+    try:
+        meetings = json.load(open("meetings.txt"))
+        settings = json.load(open("settings.txt"))
+    except:
+        print('There was an error in re-reading from data files. Please restart StickyMeet.')
+        exit()
+    time.sleep(2)
+    print('Data re-read successfully.')
+    
 def mainRun():
     print('You can always type \'exit\' to exit the application!')
     printSpace()
     startingAction = input('Type \'view\' to view your saved meetings or \'view -v\' to view them in a GUI Window, \n\'add\' for adding a new meeting, \n\'remove\' for removing a meeting,\n\'settings\' for changing or viewing User Settings,\n\'help\' for help: ')
-    if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove' and startingAction != 'view -v' and startingAction != 'exit' and startingAction != 'help' and startingAction != 'settings' and startingAction != 'system-reset':
+    if startingAction != 'view' and startingAction != 'add' and startingAction != 'remove' and startingAction != 'view -v' and startingAction != 'exit' and startingAction != 'help' and startingAction != 'settings' and startingAction != 'system-reset' and startingAction != 're-read' and startingAction != 'version':
         print('Sorry, invalid action typed! Please try again!')
         printSpace()
         print('-------')
@@ -466,6 +479,17 @@ def mainRun():
         mainRun()
     elif startingAction == 'system-reset':
         performDataReset()
+        printSpace()
+        print('-------')
+        mainRun()
+    elif startingAction == 're-read':
+        rereadData()
+        printSpace()
+        print('-------')
+        mainRun()
+    elif startingAction == 'version':
+        printSpace()
+        print('StickyMeet Version 1.0 \n© Prakhar Trivedi 2021')
         printSpace()
         print('-------')
         mainRun()
