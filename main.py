@@ -29,7 +29,7 @@ try:
     if meetings['sample'] != None:
         meetings.pop('sample')
 except:
-    print('No sample in database')
+    print('')
 
 ## Data Format:
 ## json
