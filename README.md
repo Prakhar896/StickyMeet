@@ -7,17 +7,17 @@ Downloading and using StickyMeet is a breeze!
 Here are the steps to getting StickyMeet on your computer:
 
 1) Click [here](http://gg.gg/StickyMeetDownload) to download a zip file of StickyMeet. 
-2) Click and expand the StickyMeet zip file and you should see a folder named `StickyMeet-main`
+2) Click and expand the StickyMeet zip file and you should see a folder named `StickyMeet-1.0`
 
 ### Usage with IDLE
 3) Download and install the latest Python [here](https://python.org)
-4) Open up an app called IDLE and click File > Open and select the `main.py` file inside the `StickyMeet-main` folder.
+4) Open up an app called IDLE and click File > Open and select the `main.py` file inside the `StickyMeet-1.0` folder.
 5) Click Run > Run Module to run the file.
 6) Follow the instructions and start using StickyMeet! Type in `help` for help on using StickyMeet.
 
 ### Usage with Terminal/Command Prompt
 3) On macOS, open up an app named Terminal, or, if on Windows, open up Command Prompt.
-4) Considering the location for file downlaods in your browser is the default, cd (change directory) into the folder using `cd Downloads/StickyMeet-main`
+4) Considering the location for file downlaods in your browser is the default, cd (change directory) into the folder using `cd Downloads/StickyMeet-1.0`
 5) Type in `python3 main.py` to run the `main.py` file and you can start using StickyMeet from your OS's shell!
 
 ## Frequently-Answered Questions
