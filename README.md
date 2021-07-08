@@ -6,7 +6,7 @@ Downloading and using StickyMeet is a breeze!
 
 Here are the steps to getting StickyMeet on your computer:
 
-1) Click [here](http://gg.gg/DownloadStickyMeet) to download a zip file of StickyMeet. 
+1) Click [here](http://gg.gg/StickyMeetDownload) to download a zip file of StickyMeet. 
 2) Click and expand the StickyMeet zip file and you should see a folder named `StickyMeet-main`
 
 ### Usage with IDLE
