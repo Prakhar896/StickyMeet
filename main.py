@@ -806,7 +806,7 @@ def mainRun():
         mainRun()
     elif startingAction == 'version':
         printSpace()
-        print('StickyMeet Version 1.0 \n© Prakhar Trivedi 2021')
+        print('StickyMeet Version 1.1 \n© Prakhar Trivedi 2021')
         printSpace()
         print('-------')
         mainRun()
