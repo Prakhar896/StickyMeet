@@ -7,16 +7,16 @@ import json
 
 print('Welcome to StickyMeet! What would you like to do today?')
 
-meetings = []
+meetings = {}
 if os.path.isfile('meetings.txt'):
     meetings = json.load(open("meetings.txt"))
 else:
     f = open("meetings.txt", "w")
     json.dump({ "sample": "sample" }, f)
     f.close()
-    meetings = []
+    meetings = {}
 
-settings = []
+settings = {}
 if os.path.isfile('settings.txt'):
     settings = json.load(open("settings.txt"))
 else:
@@ -623,16 +623,16 @@ def performDataReset():
     print('Writing new data files...Please wait.')
     time.sleep(2)
     try:
-        meetings = []
+        meetings = {}
         if os.path.isfile('meetings.txt'):
             meetings = json.load(open("meetings.txt"))
         else:
             f = open("meetings.txt", "w")
             json.dump({ "sample": "sample" }, f)
             f.close()
-            meetings = []
+            meetings = {}
             
-        settings = []
+        settings = {}
         if os.path.isfile('settings.txt'):
             settings = json.load(open("settings.txt"))
         else:
