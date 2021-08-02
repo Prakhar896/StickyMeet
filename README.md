@@ -32,3 +32,5 @@ Ans: If you come across this situation, please type in `system-reset` on the mai
 Q. Does using the GUI (visual) version of the view meetings function cause GPU lags or cause a lot of resources to be used?
 
 Ans: The GUI version was designed to be of low-intensity on your system's GPU and hence you will experience a little to nothing difference on your computer's processing speeds so do not worry.
+
+Copyright © 2021 Prakhar Trivedi
