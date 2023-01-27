@@ -1,3 +1,6 @@
 meetings.txt
 settings.txt
 test_code.py
+virt/
+licensekey.txt
+__pycache__/

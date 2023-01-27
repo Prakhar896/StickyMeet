@@ -2,8 +2,46 @@
 import os, sys, subprocess
 import tkinter as tk
 from tkinter import filedialog, Text
+from activation import *
 import time
 import json
+
+# Check for copy activation (Activator DRM Process)
+activationCheck = checkForActivation()
+if activationCheck == True:
+    print("StickyMeet copy is activated!")
+elif activationCheck == False:
+    print("StickyMeet copy is not activated! Triggering copy activation process...")
+    print()
+    version = None
+    if not os.path.isfile(os.path.join(os.getcwd(), 'version.txt')):
+        version = input("Please enter the version of StickyMeet you are using: ")
+        print()
+    else:
+        version = open('version.txt', 'r').read()
+    try:
+        initActivation("tllee4f2", version)
+    except Exception as e:
+        print("ERROR: An error occurred in activating this copy. Error: {}".format(e))
+        print("Startup aborted.")
+        sys.exit(1)
+else:
+    # KVR
+    print("This copy's license key needs to be verified (every 14 days). Triggering key verification request...")
+    print()
+    version = None
+    if not os.path.isfile(os.path.join(os.getcwd(), 'version.txt')):
+        version = input("Please enter the version of StickyMeet you are using: ")
+        print()
+    else:
+        version = open('version.txt', 'r').read()
+    try:
+        makeKVR("tllee4f2", version)
+    except Exception as e:
+        print("ERROR: Failed to make KVR request. Error: {}".format(e))
+        print("Startup aborted.")
+        sys.exit(1)
+print()
 
 print('Welcome to StickyMeet! What would you like to do today?')
 
