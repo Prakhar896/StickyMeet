@@ -9,7 +9,7 @@ A console application (with a tad bit of GUI) that allows you to easily save you
 
 ### How It Works
 
-Any copy of StickyMeet will first need to be activated with Activator. You do not have to do anything on your part; upon boot, if not activated, Access will locate the latest Activator server and will activate itself. A `licensekey.txt` file will be downloaded that will contain the license key for the copy. This file will be used to verify the copy's authenticity.
+Any copy of StickyMeet will first need to be activated with Activator. You do not have to do anything on your part; upon boot, if not activated, StickyMeet will locate the latest Activator server and will activate itself. A `licensekey.txt` file will be downloaded that will contain the license key for the copy. This file will be used to verify the copy's authenticity.
 
 **DO NOT** delete the `licensekey.txt` file. If you do, the copy will be deactivated and will need to be activated again.
 
