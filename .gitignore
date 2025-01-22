@@ -4,3 +4,4 @@ test_code.py
 virt/
 licensekey.txt
 __pycache__/
+.DS_Store

@@ -1,47 +1,34 @@
 # Zoom Meeting ID and password saving system ***
-import os, sys, subprocess
+import os, sys, subprocess, datetime
 import tkinter as tk
 from tkinter import filedialog, Text
-from activation import *
 import time
 import json
 
+def checkForActivation():
+    if not os.path.exists(os.path.join(os.getcwd(), "licensekey.txt")):
+        return False
+    else:
+        with open("licensekey.txt", 'r') as f:
+            # If last license check is more than 14 days prior, return False
+            if (datetime.datetime.now() - datetime.datetime.strptime(f.readlines()[3].split("\n")[0][len("Last License Check: ")::], "%Y-%m-%d %H:%M:%S")).days > 14:
+                return "Verify"
+            else:
+                return True
+
 # Check for copy activation (Activator DRM Process)
-activationCheck = checkForActivation()
-if activationCheck == True:
-    print("StickyMeet copy is activated!")
-elif activationCheck == False:
-    print("StickyMeet copy is not activated! Triggering copy activation process...")
-    print()
-    version = None
-    if not os.path.isfile(os.path.join(os.getcwd(), 'version.txt')):
-        version = input("Please enter the version of StickyMeet you are using: ")
-        print()
-    else:
-        version = open('version.txt', 'r').read()
+status = checkForActivation()
+if status != True:
     try:
-        initActivation("tllee4f2", version)
+        import activation
+        if status == False:
+            activation.initActivation("tllee4f2", "1.3")
+        elif status == "Verify":
+            activation.makeKVR("tllee4f2", "1.3")
     except Exception as e:
-        print("ERROR: An error occurred in activating this copy. Error: {}".format(e))
-        print("Startup aborted.")
-        sys.exit(1)
-else:
-    # KVR
-    print("This copy's license key needs to be verified (every 14 days). Triggering key verification request...")
-    print()
-    version = None
-    if not os.path.isfile(os.path.join(os.getcwd(), 'version.txt')):
-        version = input("Please enter the version of StickyMeet you are using: ")
-        print()
-    else:
-        version = open('version.txt', 'r').read()
-    try:
-        makeKVR("tllee4f2", version)
-    except Exception as e:
-        print("ERROR: Failed to make KVR request. Error: {}".format(e))
-        print("Startup aborted.")
-        sys.exit(1)
-print()
+        print("ERROR: Activation failed to initialize. Error: {}".format(e))
+        if input() != "skip":
+            sys.exit(1)
 
 print('Welcome to StickyMeet! What would you like to do today?')
 
@@ -844,7 +831,7 @@ def mainRun():
         mainRun()
     elif startingAction == 'version':
         printSpace()
-        print('StickyMeet Version 1.1 \n© Prakhar Trivedi 2021')
+        print('StickyMeet Version 1.3 \n© Prakhar Trivedi 2021-2025')
         printSpace()
         print('-------')
         mainRun()
